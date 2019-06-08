@@ -21,6 +21,9 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 // CODELAB: Change this to add a delay (ms) before the server responds.
 const FORECAST_DELAY = 0;
@@ -42,7 +45,7 @@ const fakeForecast = {
     temperature: 43.4,
     humidity: 0.62,
     windSpeed: 3.74,
-    windBearing: 208,
+    windBearing: 208
   },
   daily: {
     data: [
@@ -52,7 +55,7 @@ const fakeForecast = {
         sunriseTime: 1553079633,
         sunsetTime: 1553123320,
         temperatureHigh: 52.91,
-        temperatureLow: 41.35,
+        temperatureLow: 41.35
       },
       {
         time: 86400,
@@ -60,7 +63,7 @@ const fakeForecast = {
         sunriseTime: 1553165933,
         sunsetTime: 1553209784,
         temperatureHigh: 48.01,
-        temperatureLow: 44.17,
+        temperatureLow: 44.17
       },
       {
         time: 172800,
@@ -68,7 +71,7 @@ const fakeForecast = {
         sunriseTime: 1553252232,
         sunsetTime: 1553296247,
         temperatureHigh: 50.31,
-        temperatureLow: 33.61,
+        temperatureLow: 33.61
       },
       {
         time: 259200,
@@ -76,7 +79,7 @@ const fakeForecast = {
         sunriseTime: 1553338532,
         sunsetTime: 1553382710,
         temperatureHigh: 46.44,
-        temperatureLow: 33.82,
+        temperatureLow: 33.82
       },
       {
         time: 345600,
@@ -84,7 +87,7 @@ const fakeForecast = {
         sunriseTime: 1553424831,
         sunsetTime: 1553469172,
         temperatureHigh: 60.5,
-        temperatureLow: 43.82,
+        temperatureLow: 43.82
       },
       {
         time: 432000,
@@ -92,7 +95,7 @@ const fakeForecast = {
         sunriseTime: 1553511130,
         sunsetTime: 1553555635,
         temperatureHigh: 61.79,
-        temperatureLow: 32.8,
+        temperatureLow: 32.8
       },
       {
         time: 518400,
@@ -100,7 +103,7 @@ const fakeForecast = {
         sunriseTime: 1553597430,
         sunsetTime: 1553642098,
         temperatureHigh: 48.28,
-        temperatureLow: 33.49,
+        temperatureLow: 33.49
       },
       {
         time: 604800,
@@ -108,10 +111,10 @@ const fakeForecast = {
         sunriseTime: 1553683730,
         sunsetTime: 1553728560,
         temperatureHigh: 43.58,
-        temperatureLow: 33.68,
-      },
-    ],
-  },
+        temperatureLow: 33.68
+      }
+    ]
+  }
 };
 
 /**
@@ -131,7 +134,6 @@ function generateFakeForecast(location) {
   return result;
 }
 
-
 /**
  * Gets the weather forecast from the Dark Sky API for the given location.
  *
@@ -141,16 +143,19 @@ function generateFakeForecast(location) {
 function getForecast(req, resp) {
   const location = req.params.location || '40.7720232,-73.9732319';
   const url = `${BASE_URL}/${API_KEY}/${location}`;
-  fetch(url).then((resp) => {
-    return resp.json();
-  }).then((data) => {
-    setTimeout(() => {
-      resp.json(data);
-    }, FORECAST_DELAY);
-  }).catch((err) => {
-    console.error('Dark Sky API Error:', err.message);
-    resp.json(generateFakeForecast(location));
-  });
+  fetch(url)
+    .then(resp => {
+      return resp.json();
+    })
+    .then(data => {
+      setTimeout(() => {
+        resp.json(data);
+      }, FORECAST_DELAY);
+    })
+    .catch(err => {
+      console.error('Dark Sky API Error:', err.message);
+      resp.json(generateFakeForecast(location));
+    });
 }
 
 /**
